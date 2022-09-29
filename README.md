@@ -5,7 +5,7 @@ Run your commands with more ease!
 <img src="screenshot.png" width="700" height="700">
 
 # Problem Statement
-Have you ever wondered your running too many commands from your terminal, 
+Have you ever wondered you're running too many commands from your `terminal`, 
 and you're just replacing an input every single time by pressing backspace or moving cursor to position.
 
 `Don't waste your time to move the cursors => just place your inputs in commander and run!`
