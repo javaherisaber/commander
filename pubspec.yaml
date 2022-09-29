@@ -1,0 +1,40 @@
+name: commander
+description: Run, automate and store commands
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.1 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  process_run: ^0.12.3+2
+  shared_preferences: ^2.0.15
+  rxdart: ^0.27.5
+  live_event: ^1.0.0
+  touch_mouse_behavior: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  msix: ^3.6.3
+
+msix_config:
+  display_name: Commander
+  certificate_path: C:\Workspace\Flutter\commander\signing\CERTIFICATE.pfx
+  certificate_password: IrNetProject
+  logo_path: C:\Workspace\Flutter\commander\assets\app_icon.png
+  start_menu_icon_path: C:\Workspace\Flutter\commander\assets\app_icon.png
+  tile_icon_path: C:\Workspace\Flutter\commander\assets\app_icon.png
+  publisher_display_name: BuildToApp
+  identity_name: com.buildtoapp.commander
+  msix_version: 1.0.0.0
+  capabilities: internetClient
+  install_certificate: true
+  app_installer:
+    publish_folder_path: build\windows\runner\Release
+
+flutter:
+  uses-material-design: true
