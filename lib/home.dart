@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:touch_mouse_behavior/touch_mouse_behavior.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,13 +33,15 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Text('Commander', style: TextStyle(fontSize: 24, color: Colors.blue, fontWeight: FontWeight.bold)),
               SizedBox(height: 48),
-              SizedBox(
-                width: 600,
+              Container(
+                width: 1000,
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: command(),
               ),
               SizedBox(height: 16),
-              SizedBox(
-                width: 600,
+              Container(
+                width: 1000,
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: input(),
               ),
               SizedBox(height: 16),
@@ -110,8 +112,9 @@ class _HomePageState extends State<HomePage> {
           items = ['Run your command to see the results here!'];
         }
         return Container(
-          width: 600,
+          width: 1000,
           height: 400,
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
           padding: EdgeInsets.all(16),
           color: Colors.black87,
           child: TouchMouseScrollable(
