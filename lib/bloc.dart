@@ -27,18 +27,20 @@ class MyBloc {
     _input = value;
   }
 
-  void onRunButtonClicked() {
-    if (_command != null && _command!.contains(RegExp(r'{.*\}')) && _input == null) {
+  void onRunButtonClicked() async {
+    if (_command != null && _command!.contains(RegExp(r'{#}')) && _input == null) {
+      runCommand(_command!);
       return;
     }
-    var executable = _command!;
-    if (_input != null) {
-      final args = _input!.split(',');
-      for (var a in args) {
-        executable = executable.replaceFirst(RegExp(r'{.*\}'), a);
+    if (_input != null && _input!.contains(",")) {
+      final inputs = _input!.split(",");
+      for (var i in inputs) {
+        await Future.delayed(const Duration(milliseconds: 50));
+        runCommand(_command!.replaceFirst(RegExp(r'{#}'), i));
       }
+    } else {
+      runCommand(_command!.replaceFirst(RegExp(r'{#}'), _input!));
     }
-    runCommand(executable);
   }
 
   void runCommand(String executable) async {
