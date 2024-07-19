@@ -1,5 +1,6 @@
 import 'package:commander/main.dart';
 import 'package:commander/sharedpreferences.dart';
+import 'package:commander/widget/user_input.dart';
 import 'package:flutter/material.dart';
 import 'package:touch_mouse_behavior/touch_mouse_behavior.dart';
 
@@ -12,7 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _consoleOutputScrollController = ScrollController();
-  final TextEditingController _consoleTextController = TextEditingController();
+  final TextEditingController _commandTextController = TextEditingController();
+  static const double widgetsWidth = 1000;
 
   @override
   void initState() {
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void initializeConsole() async {
-    _consoleTextController.text = await AppPreferences.lastCommand;
+    _commandTextController.text = await AppPreferences.lastCommand;
   }
 
   @override
@@ -32,19 +34,13 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const Text('Commander', style: TextStyle(fontSize: 24, color: Colors.blue, fontWeight: FontWeight.bold)),
-              SizedBox(height: 48),
-              Container(
-                width: 1000,
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: command(),
-              ),
-              SizedBox(height: 16),
-              Container(
-                width: 1000,
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: input(),
-              ),
-              SizedBox(height: 16),
+              const SizedBox(height: 24),
+              command(),
+              const SizedBox(height: 16),
+              input1(),
+              const SizedBox(height: 16),
+              input2(),
+              const SizedBox(height: 16),
               consoleOutput(),
             ],
           ),
@@ -54,49 +50,48 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget command() {
-    return TextFormField(
-      controller: _consoleTextController,
-      onChanged: bloc.onCommandInputChanged,
-      decoration: const InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green),
+    return Container(
+      width: widgetsWidth,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: TextFormField(
+        controller: _commandTextController,
+        onChanged: bloc.onCommandInputChanged,
+        decoration: const InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.green),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          hintText: 'Your command here, eg. adb shell',
+          hintStyle: TextStyle(color: Colors.black38),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
-        ),
-        hintText: 'Your command here, eg. adb shell',
-        hintStyle: TextStyle(color: Colors.black38),
       ),
     );
   }
 
-  Widget input() {
-    return TextField(
-      // controller: textInputController,
-      onChanged: bloc.onInputChanged,
-      onSubmitted: (_) => bloc.onRunButtonClicked(),
-      decoration: InputDecoration(
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
-        ),
-        hintText: 'Inputs here separated with comma',
-        hintStyle: const TextStyle(color: Colors.black38),
-        suffixIcon: IconButton(
-          onPressed: () async {
-            bloc.onRunButtonClicked();
-            Future.delayed(Duration(milliseconds: 200), () {
-              _consoleOutputScrollController.animateTo(
-                _consoleOutputScrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.fastOutSlowIn,
-              );
-            });
-          },
-          icon: const Icon(Icons.send, color: Colors.blue),
-        ),
+  Widget input1() {
+    return Container(
+      width: widgetsWidth,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: UserInput(
+        onChanged: bloc.onInput1Changed,
+        onSubmitted: (_) => bloc.onRunInput1ButtonClicked(),
+        onRunClick: () => bloc.onRunInput1ButtonClicked(),
+        scrollController: _consoleOutputScrollController,
+      ),
+    );
+  }
+
+  Widget input2() {
+    return Container(
+      width: widgetsWidth,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: UserInput(
+        onChanged: bloc.onInput2Changed,
+        onSubmitted: (_) => bloc.onRunInput2ButtonClicked(),
+        onRunClick: () => bloc.onRunInput2ButtonClicked(),
+        scrollController: _consoleOutputScrollController,
       ),
     );
   }
@@ -112,7 +107,7 @@ class _HomePageState extends State<HomePage> {
           items = ['Run your command to see the results here!'];
         }
         return Container(
-          width: 1000,
+          width: widgetsWidth,
           height: 400,
           margin: EdgeInsets.symmetric(horizontal: 16.0),
           padding: EdgeInsets.all(16),

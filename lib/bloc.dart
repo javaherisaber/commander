@@ -12,7 +12,8 @@ class MyBloc {
   Stream<List<String>> get consoleOutput => _consoleOutput.stream;
 
   String? _command;
-  String? _input;
+  String? _input1;
+  String? _input2;
 
   void _initialize() async {
     _command = await AppPreferences.lastCommand;
@@ -23,23 +24,35 @@ class MyBloc {
     AppPreferences.saveLastCommand(value);
   }
 
-  void onInputChanged(String value) {
-    _input = value;
+  void onInput1Changed(String value) {
+    _input1 = value;
   }
 
-  void onRunButtonClicked() async {
-    if (_command != null && _command!.contains(RegExp(r'{#}')) && _input == null) {
+  void onInput2Changed(String value) {
+    _input2 = value;
+  }
+
+  void onRunInput1ButtonClicked() async {
+    _handleRunInputClick(_input1);
+  }
+
+  void onRunInput2ButtonClicked() async {
+    _handleRunInputClick(_input2);
+  }
+
+  void _handleRunInputClick(String? input) async {
+    if (_command != null && _command!.contains(RegExp(r'{#}')) && input == null) {
       runCommand(_command!);
       return;
     }
-    if (_input != null && _input!.contains(",")) {
-      final inputs = _input!.split(",");
+    if (input != null && input.contains(",")) {
+      final inputs = input.split(",");
       for (var i in inputs) {
         await Future.delayed(const Duration(milliseconds: 50));
         runCommand(_command!.replaceFirst(RegExp(r'{#}'), i));
       }
-    } else {
-      runCommand(_command!.replaceFirst(RegExp(r'{#}'), _input!));
+    } else if (input != null) {
+      runCommand(_command!.replaceFirst(RegExp(r'{#}'), input));
     }
   }
 
